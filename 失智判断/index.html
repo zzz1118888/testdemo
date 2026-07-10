@@ -97,6 +97,10 @@
         .btn-yes { background: var(--hk-green); color: white; }
         .btn-no { background: #95a5a6; color: white; }
     </style>
+    <!-- 音樂資源 (請將 bg_music.mp3 放在同目錄下) -->
+    <audio id="game-music" loop>
+        <source src="bg_music.mp3" type="audio/mpeg">
+    </audio>
 </head>
 <body>
 
@@ -212,6 +216,24 @@
     </div>
 
     <script>
+        const music = document.getElementById('game-music');
+
+        function playMusic() {
+            music.volume = 0.2; // 音量控制在 20%
+            music.play().catch(e => console.log("等待互動"));
+        }
+    
+        function stopMusic() {
+            let fadeOut = setInterval(() => {
+                if (music.volume > 0.05) {
+                    music.volume -= 0.05;
+                } else {
+                    clearInterval(fadeOut);
+                    music.pause();
+                    music.currentTime = 0;
+                }
+            }, 100);
+        }
         let currentStageIndex = 1; 
         let catchTimer, aiMoveTimer;
         let gameOver = false; 
@@ -236,7 +258,7 @@
         };
 
         function switchView(viewId) { document.querySelectorAll('.view-section').forEach(el => { el.classList.remove('active-view'); el.style.display = 'none'; }); document.getElementById(viewId).style.display = ''; document.getElementById(viewId).classList.add('active-view'); }
-        function goHome() { clearTimeout(catchTimer); clearTimeout(aiMoveTimer); gameOver = true; switchView('view-intro'); }
+        function goHome() { stopMusic(); clearTimeout(catchTimer); clearTimeout(aiMoveTimer); gameOver = true; switchView('view-intro'); }
 
         function startAssessmentFlow() {
             trackingData = { g1ThinkTimes: [], g2Errors: 0, g3ReactTimes: [], g3MouseTremorCount: 0, g4PerseverationErrors: 0 };
@@ -251,6 +273,8 @@
         }
 
         function enterGame() {
+            playMusic(); // 新增：進入遊戲時播放
+            switchView('view-game');
             switchView('view-game');
             document.getElementById('btn-next-test').style.display = 'none'; 
             document.getElementById('game-header-title').innerText = `第 ${currentStageIndex}/4 關：${gameData[currentStageIndex].title}`;
@@ -284,6 +308,7 @@
         }
 
         function generateReport() {
+            stopMusic();
             document.getElementById('rep-timestamp').innerText = `檢測時間：${new Date().toLocaleString()}`;
             
             const curAvgThink = trackingData.g1ThinkTimes.length > 0 ? parseFloat((trackingData.g1ThinkTimes.reduce((a,b)=>a+b,0) / trackingData.g1ThinkTimes.length / 1000).toFixed(1)) : 0;
@@ -446,7 +471,7 @@
         }
 
         // --- 遊戲 4：規則切換 ---
-        let sortItems = [ { icon: '🍎', isRed: true, isVeg: false }, { icon: '🍏', isRed: false, isVeg: false }, { icon: '🍅', isRed: true, isVeg: true }, { icon: '🥦', isRed: false, isVeg: true }, { icon: '🍓', isRed: true, isVeg: false }, { icon: '🍎', isRed: true, isVeg: false }, { icon: '🥬', isRed: false, isVeg: true }, { icon: '🍒', isRed: true, isVeg: false }, { icon: '🥕', isRed: true, isVeg: true } ];
+        let sortItems = [ { icon: '🍎', isRed: true, isVeg: false }, { icon: '🍏', isRed: false, isVeg: false }, { icon: '🍅', isRed: true, isVeg: true }, { icon: '🥦', isRed: false, isVeg: true }, { icon: '🍓', isRed: true, isVeg: false }, { icon: '🍎', isRed: true, isVeg: false }, { icon: '🌽', isRed: false, isVeg: true }, { icon: '🍒', isRed: true, isVeg: false }, { icon: '🥕', isRed: true, isVeg: true } ];
         let currentSortIndex = 0; let isRuleRed = true;
         function initGame4() {
             currentSortIndex = 0; isRuleRed = true; gameOver = false; document.getElementById('sort-rule-text').innerText = "請將【紅色】的食物放入購物車"; document.getElementById('sort-rule-text').className = "sort-rule"; document.getElementById('game-status').innerText = "請判斷是否符合規則"; showNextSortItem();
@@ -463,7 +488,9 @@
             let item = sortItems[currentSortIndex]; let correctYes = isRuleRed ? item.isRed : item.isVeg;
             if (userClickYes !== correctYes && (currentSortIndex === 5 || currentSortIndex === 6)) { trackingData.g4PerseverationErrors++; }
             currentSortIndex++; showNextSortItem();
+            
         }
+        
     </script>
 </body>
 </html>
