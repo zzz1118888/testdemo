@@ -376,7 +376,7 @@
                         
                         let aiMove = getSmartAiMove(board1); 
                         board1[aiMove] = 2; 
-                        bEl.children[aiMove].innerHTML = '<span class="piece-pop">🫓</span>';
+                        bEl.children[aiMove].innerHTML = '<span class="piece-pop">🍤</span>';
                         
                         if(checkWin1(2)) { 
                             document.getElementById('game-status').innerText = "電腦贏了，再接再厲";
