@@ -207,7 +207,7 @@
                 </div>
             </div>
 
-            <button class="btn-large" style="background-color: var(--hk-blue); font-size: 22px; margin-top: 30px;" onclick="goHome()">🏠 完成測試，返回大廳</button>
+            <button class="btn-large" style="background-color: var(--hk-blue); font-size: 22px; margin-top: 30px;" onclick="goHome()">完成測試，返回大廳</button>
         </div>
     </div>
 
@@ -231,7 +231,7 @@
         const gameData = {
             1: { title: "點心對弈棋", rules: "<p>1. 您和電腦對決，點擊空白格子放<b>蝦餃🥟</b>。</p><p>2. 先連成三線者勝。</p>" },
             2: { title: "麻雀尋親記", rules: "<p>1. 每次翻開兩隻，圖案一樣就配對。</p><p>2. 試著用最少次數記住位置！</p>" },
-            3: { title: "快手搶利是", rules: "<p>1. 利是🧧隨機出現，請用最快速度點擊！</p><p>2. 系統將同時分析您的手部穩定度。</p>" },
+            3: { title: "快手搶利是", rules: "<p>1. 利是隨機出現，請用最快速度點擊！</p><p>2. 系統將同時分析您的手部穩定度。</p>" },
             4: { title: "超市執貨員", rules: "<p>1. 根據上方<b>指示牌</b>，決定要不要放入購物車。</p><p>2. <b>注意：規則可能會中途改變喔！</b></p>" }
         };
 
@@ -269,7 +269,7 @@
                 nextBtn.innerText = `前往第 ${currentStageIndex + 1} 關`; 
                 nextBtn.onclick = () => { currentStageIndex++; showRulesForStage(currentStageIndex); };
             } else { 
-                document.getElementById('game-status').innerText = "所有遊戲均已完成！請點擊下方按鈕查看您的專屬報告。";
+                document.getElementById('game-status').innerText = "所有遊戲均已完成，請點擊下方按鈕查看您的專屬報告。";
                 nextBtn.innerText = "生成大腦評估報告"; 
                 nextBtn.style.backgroundColor = "var(--hk-purple)"; 
                 nextBtn.onclick = generateReport; 
@@ -319,7 +319,7 @@
                 preContent = `<div class="p-task"><div class="p-icon"></div><div class="p-detail"><strong>健康維持方案</strong>您的各項指標都非常優秀！請繼續保持目前的社交活動與規律睡眠。</div></div>`;
             }
             if(curFlex > 0 || tremor > 15) {
-                preContent += `<div style="background:#fff3cd; padding:10px; border-radius:6px; font-size:14px; margin-top:20px; color:#856404; border: 1px dashed #ffeeba;"><strong>👨‍👩‍👧 家屬建議：</strong><br>長者在某些任務中出現輕微卡頓，建議家屬週末探望時，多陪同進行溫和的腦力刺激活動（如一起看舊相簿）。</div>`;
+                preContent += `<div style="background:#fff3cd; padding:10px; border-radius:6px; font-size:14px; margin-top:20px; color:#856404; border: 1px dashed #ffeeba;"><strong>家屬建議：</strong><br>長者在某些任務中出現輕微卡頓，建議家屬週末探望時，多陪同進行溫和的腦力刺激活動（如一起看舊相簿）。</div>`;
             }
 
             document.getElementById('rep-prescription-content').innerHTML = preContent;
