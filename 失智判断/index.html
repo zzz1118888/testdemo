@@ -278,7 +278,7 @@
             <h2 class="report-title">大腦活力健康報告</h2>
             <div class="report-time-stamp" id="rep-timestamp"></div>
             
-            <div class="report-section-title">📍 第一部分：核心認知維度評估</div>
+            <div class="report-section-title">第一部分：核心認知維度評估</div>
             <div class="report-grid">
                 <div class="report-card">
                     <div class="report-card-header"><div class="r-title">工作記憶表現 (短期記憶)</div><div id="rep-mem-status"></div></div>
@@ -295,7 +295,7 @@
                 </div>
             </div>
 
-            <div class="report-section-title invisible">🔍 第二部分：微表型行為數據分析</div>
+            <div class="report-section-title invisible">第二部分：微表型行為數據分析</div>
             <div class="report-grid">
                 <div class="report-card invisible-card">
                     <div class="report-card-header"><div class="r-title">決策潛伏期 (猶豫時間追蹤)</div></div>
@@ -313,7 +313,7 @@
                 </div>
             </div>
 
-            <div class="report-section-title prescription">💊 第三部分：非藥物介入處方方案 (NPI)</div>
+            <div class="report-section-title prescription">第三部分：非藥物介入處方方案 (NPI)</div>
             <div class="report-grid">
                 <div class="report-card prescription-card">
                     <div class="r-content-box" id="rep-prescription-content">
@@ -381,11 +381,11 @@
         function handleStageComplete() {
             const nextBtn = document.getElementById('btn-next-test'); nextBtn.style.display = 'block';
             if (currentStageIndex < 4) { 
-                nextBtn.innerText = `進入下一個評估項目 ➡️`; 
+                nextBtn.innerText = `進入下一個評估項目`; 
                 nextBtn.onclick = () => { currentStageIndex++; showRulesForStage(currentStageIndex); };
             } else { 
                 document.getElementById('game-status').innerText = "評估階段均已完成，請生成健康報告。";
-                nextBtn.innerText = "生成大腦評估報告 📊"; 
+                nextBtn.innerText = "生成大腦評估報告"; 
                 nextBtn.style.backgroundColor = "var(--hk-accent)"; 
                 nextBtn.onclick = generateReport; 
             }
