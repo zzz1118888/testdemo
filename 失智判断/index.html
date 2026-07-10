@@ -3,135 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>樂齡大腦活力測試系統 (單次檢測版)</title>
+    <title>大腦活力健康評估系統 (臨床專業版)</title>
     <style>
         :root {
-            --hk-green: #2c5e43;
-            --hk-red: #a83232;
-            --hk-cream: #f4ebd9;
-            --hk-wood: #8b5a2b;
-            --hk-blue: #2b579a;
-            --hk-purple: #5c3a6b;
-            --hk-teal: #008080;
+            --medical-dark: #1E4631;
+            --medical-primary: #2C5E43;
+            --medical-secondary: #3D5A50;
+            --hk-accent: #A83232;
+            --bg-cream: #F7F4EF;
+            --card-white: #FFFFFF;
+            --text-main: #2A2A2A;
+            --text-muted: #5A5A5A;
+            --border-light: #E2E8F0;
         }
 
-        body { font-family: "Microsoft JhengHei", "Heiti TC", sans-serif; background-color: var(--hk-cream); color: #333; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        header { text-align: center; margin-bottom: 20px; border-bottom: 3px double var(--hk-red); padding-bottom: 10px; width: 100%; max-width: 1000px; }
-        h1 { color: var(--hk-red); margin: 0 0 5px 0; font-size: 28px; }
-        .subtitle { color: var(--hk-green); font-weight: bold; margin: 0; }
-        .tech-badge { background: var(--hk-red); color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px; vertical-align: middle; margin-left: 10px;}
+        body { 
+            font-family: "PingFang HK", "Helvetica Neue", "Microsoft JhengHei", sans-serif; 
+            background-color: var(--bg-cream); 
+            color: var(--text-main); 
+            margin: 0; 
+            padding: 40px 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            -webkit-font-smoothing: antialiased;
+        }
 
-        .view-section { display: none; width: 100%; max-width: 1000px; }
+        header { 
+            text-align: center; 
+            margin-bottom: 40px; 
+            border-bottom: 1px solid var(--medical-primary); 
+            padding-bottom: 20px; 
+            width: 100%; 
+            max-width: 800px; 
+        }
+
+        h1 { 
+            color: var(--medical-dark); 
+            margin: 0 0 8px 0; 
+            font-size: 26px; 
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        .subtitle { 
+            color: var(--text-muted); 
+            font-weight: 400; 
+            margin: 0; 
+            font-size: 15px;
+            letter-spacing: 0.5px;
+        }
+        .tech-badge { 
+            border: 1px solid var(--medical-primary); 
+            color: var(--medical-primary); 
+            padding: 2px 8px; 
+            border-radius: 3px; 
+            font-size: 11px; 
+            vertical-align: middle; 
+            margin-left: 8px;
+            font-weight: 500;
+        }
+
+        .view-section { display: none; width: 100%; max-width: 800px; }
         .active-view { display: flex; flex-direction: column; align-items: center; }
 
-        /* 大廳 */
-        .intro-box { background: white; border: 3px solid var(--hk-wood); border-radius: 12px; padding: 30px; max-width: 700px; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .intro-title { color: var(--hk-wood); text-align: center; border-bottom: 2px dashed #ccc; padding-bottom: 15px; }
-        .test-list { list-style-type: none; padding: 0; font-size: 18px; line-height: 1.8; }
-        .test-list li { margin-bottom: 12px; background: #f9f9f9; padding: 15px; border-left: 5px solid var(--hk-blue); border-radius: 6px; }
+        /* 大廳介紹 */
+        .intro-box { 
+            background: var(--card-white); 
+            border-top: 4px solid var(--medical-dark);
+            border-radius: 4px; 
+            padding: 40px; 
+            width: 100%; 
+            box-sizing: border-box;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03); 
+        }
+        .intro-title { 
+            color: var(--medical-dark); 
+            text-align: center; 
+            margin-top: 0;
+            margin-bottom: 25px; 
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .test-list { list-style-type: none; padding: 0; margin: 0 0 30px 0; }
+        .test-list li { 
+            margin-bottom: 16px; 
+            background: #F8FAF8; 
+            padding: 20px; 
+            border-left: 3px solid var(--medical-secondary); 
+            border-radius: 0 4px 4px 0; 
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .test-list strong { color: var(--text-main); font-size: 17px; }
 
-        .btn-large { background-color: var(--hk-green); color: white; border: none; padding: 15px 30px; font-size: 22px; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 20px; width: 100%; transition: all 0.2s; }
-        .btn-large:hover { background-color: #1e422f; transform: translateY(-2px); }
-        .btn-start { background-color: var(--hk-red); font-size: 26px; padding: 20px; box-shadow: 0 6px 12px rgba(168,50,50,0.3); }
-        .btn-next-step { background-color: var(--hk-blue); display: none; animation: pulse 1.5s infinite; max-width: 400px; }
-        .btn-exit { background-color: #757575; font-size: 18px; padding: 10px 20px; width: auto; margin-top: 0; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);}
+        /* 按鈕優化 */
+        .btn-large { 
+            background-color: var(--medical-primary); 
+            color: white; 
+            border: none; 
+            padding: 16px 32px; 
+            font-size: 18px; 
+            font-weight: 500; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            margin-top: 24px; 
+            width: 100%; 
+            transition: background-color 0.2s, transform 0.1s;
+            letter-spacing: 0.5px;
+        }
+        .btn-large:hover { background-color: var(--medical-dark); }
+        .btn-large:active { transform: translateY(1px); }
+        .btn-start { background-color: var(--hk-accent); font-size: 20px; padding: 18px; }
+        .btn-start:hover { background-color: #8E2626; }
+        .btn-next-step { background-color: var(--medical-secondary); display: none; max-width: 360px; }
+        .btn-exit { background-color: transparent; color: var(--text-muted); border: 1px solid #CBD5E1; font-size: 14px; padding: 8px 16px; width: auto; margin-top: 0; margin-bottom: 25px;}
+        .btn-exit:hover { background-color: #F1F5F9; color: var(--text-main); }
         
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        .rules-box { 
+            background: var(--card-white); 
+            border-radius: 4px; 
+            padding: 40px; 
+            font-size: 16px; 
+            line-height: 1.7; 
+            width: 100%; 
+            box-sizing: border-box;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+        .rules-title { color: var(--medical-dark); font-size: 20px; margin-top: 0; margin-bottom: 20px; text-align: center; font-weight: 600;}
 
-        .rules-box { background: white; border: 3px solid var(--hk-blue); border-radius: 12px; padding: 30px; max-width: 600px; font-size: 20px; line-height: 1.6; width: 100%; box-sizing: border-box; }
-        .rules-title { color: var(--hk-blue); font-size: 26px; border-bottom: 2px dashed #ccc; padding-bottom: 10px; margin-top:0; text-align: center;}
+        /* --- 評估報告區域 --- */
+        .report-box { max-width: 800px; }
+        .report-title { color: var(--medical-dark); text-align: center; margin-bottom: 6px; font-size: 24px; font-weight: 600;}
+        .report-time-stamp { text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 35px; letter-spacing: 0.5px; }
 
-        /* --- 報告頁面 --- */
-        .report-box { border-color: var(--hk-red); max-width: 850px; }
-        .report-title { color: var(--hk-red); text-align: center; margin-bottom: 5px;}
-        .report-time-stamp { text-align: center; color: #777; font-size: 16px; margin-bottom: 20px; }
+        .report-section-title { 
+            font-size: 15px; 
+            color: var(--medical-dark); 
+            background: #EAF0EC; 
+            padding: 6px 14px; 
+            border-radius: 3px; 
+            margin-top: 35px; 
+            margin-bottom: 15px; 
+            display: inline-block;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
 
-        .report-section-title { font-size: 20px; color: white; background: var(--hk-blue); padding: 8px 15px; border-radius: 6px; margin-top: 25px; margin-bottom: 15px; display: inline-block;}
-        .report-section-title.invisible { background: var(--hk-purple); }
-        .report-section-title.prescription { background: var(--hk-teal); }
-
-        .report-card { background: #f9f9f9; padding: 20px; border-radius: 10px; border-left: 8px solid var(--hk-green); box-shadow: 0 4px 8px rgba(0,0,0,0.05); margin-bottom: 15px;}
-        .report-card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 10px; }
-        .r-title { font-size: 20px; color: #222; font-weight: bold; }
+        .report-card { 
+            background: var(--card-white); 
+            padding: 24px; 
+            border-radius: 4px; 
+            border: 1px solid var(--border-light);
+            border-left: 4px solid var(--medical-primary); 
+            box-shadow: 0 2px 12px rgba(0,0,0,0.01); 
+            margin-bottom: 16px;
+        }
+        .report-card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #F1F5F9; padding-bottom: 12px; margin-bottom: 14px; }
+        .r-title { font-size: 16px; color: var(--text-main); font-weight: 600; }
         
-        .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 16px; font-weight: bold; }
-        .status-good { background: #d4edda; color: #155724; border: 1px solid #c3e6cb;}
-        .status-warn { background: #fff3cd; color: #856404; border: 1px solid #ffeeba;}
-        .status-danger { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;}
+        .status-badge { padding: 4px 10px; border-radius: 2px; font-size: 13px; font-weight: 500; }
+        .status-good { background: #EDF7ED; color: #1E4620; border: 1px solid #C4E5C6;}
+        .status-warn { background: #FFF9E6; color: #664D03; border: 1px solid #FFF0C2;}
+        .status-danger { background: #FDF2F2; color: #5F2120; border: 1px solid #F8D7DA;}
         
-        .r-content-box { font-size: 18px; line-height: 1.6; color: #444; }
-        .metric-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 16px; }
-        .metric-val { font-weight: bold; color: var(--hk-blue); }
+        .r-content-box { font-size: 15px; line-height: 1.6; color: var(--text-main); }
+        .metric-row { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 15px; }
+        .metric-val { font-weight: 600; color: var(--medical-dark); }
 
-        .invisible-card { border-left-color: var(--hk-purple); background: #fcf9ff; }
-        .insight-text { font-style: italic; color: #555; background: #e8eaf6; padding: 10px; border-radius: 6px; margin-top: 10px; font-size: 16px;}
+        .invisible-card { border-left-color: var(--medical-secondary); background: var(--card-white); }
+        .insight-text { font-size: 14px; color: var(--text-muted); background: #F8FAFC; padding: 12px 16px; border-radius: 4px; margin-top: 12px; border-left: 2px solid #D8E2DC;}
         
-        .prescription-card { border-left-color: var(--hk-teal); background: #f0fdfa; }
-        .p-task { display: flex; align-items: flex-start; margin-bottom: 15px; background: white; padding: 15px; border-radius: 8px; border: 1px solid #ccfbf1;}
-        .p-icon { font-size: 30px; margin-right: 15px; }
-        .p-detail strong { display: block; color: var(--hk-teal); font-size: 18px; margin-bottom: 5px;}
+        .prescription-card { border-left-color: var(--hk-accent); background: var(--card-white); }
+        .p-task { display: flex; align-items: flex-start; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px dashed var(--border-light); }
+        .p-task:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .p-icon { font-size: 15px; font-weight: 600; color: var(--hk-accent); margin-right: 12px; background: #FFF5F5; padding: 4px 8px; border-radius: 3px; }
+        .p-detail strong { display: block; color: var(--text-main); font-size: 16px; margin-bottom: 6px; font-weight: 600;}
+        .p-detail { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
 
-        /* --- 遊戲區 --- */
+        /* --- 遊戲互動區 --- */
         .game-section { width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center; }
         .game-header { display: flex; flex-direction: column; align-items: center; width: 100%; }
-        .status-text { font-size: 22px; font-weight: bold; margin: 15px 0; color: var(--hk-blue); text-align: center; min-height: 30px;}
+        .status-text { font-size: 18px; font-weight: 500; margin: 20px 0; color: var(--medical-primary); text-align: center; min-height: 25px; letter-spacing: 0.5px;}
         
-        .board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; width: 320px; background-color: #f7ebd3; border-radius: 10px; padding: 10px; border: 4px solid #d4b28c; box-sizing: border-box; }
-        .cell { background-color: rgba(235, 213, 179, 0.6); border: 2px dashed var(--hk-wood); border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 36px; cursor: pointer; user-select: none; aspect-ratio: 1 / 1; }
-        .piece-pop { display: inline-block; animation: piecePop 0.4s forwards; }
-        @keyframes piecePop { 0% { transform: scale(0.3); opacity: 0; } 60% { transform: scale(1.3); } 100% { transform: scale(1); opacity: 1; } }
+        /* 點心棋盤 */
+        .board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 340px; background-color: #EFEBE4; border-radius: 6px; padding: 12px; border: 1px solid #D3C9BE; box-sizing: border-box; }
+        .cell { background-color: #FBF9F6; border: 1px solid #D3C9BE; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-size: 28px; cursor: pointer; user-select: none; aspect-ratio: 1 / 1; transition: background-color 0.1s; }
+        .cell:hover { background-color: #FFFFFF; }
+        .piece-pop { display: inline-block; font-size: 24px; font-weight: normal; }
         
-        .mj-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 320px; }
-        .mj-card { aspect-ratio: 3 / 4; background-color: #006400; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 40px; cursor: pointer; border: 2px solid #fff; box-shadow: 0 4px 0 #004d00; transition: transform 0.3s; }
-        .mj-card.flipped { background-color: white; border-color: #ddd; box-shadow: 0 2px 0 #bbb; }
+        /* 麻雀尋親 */
+        .mj-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 340px; }
+        .mj-card { aspect-ratio: 3 / 4; background-color: #1A4329; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-size: 28px; cursor: pointer; border: 1px solid #112F1D; box-shadow: 0 3px 0 #0D2316; transition: transform 0.1s, background-color 0.2s; }
+        .mj-card.flipped { background-color: #FFFFFF; border-color: #C1D3C8; box-shadow: 0 2px 0 #A3B8AA; color: #2A2A2A; }
         
-        .catch-area { width: 320px; height: 320px; background: #e0e0e0; position: relative; border-radius: 10px; overflow: hidden; cursor: crosshair; }
-        .red-packet { position: absolute; width: 80px; height: 80px; background-color: var(--hk-red); border: 3px solid #ffdb58; border-radius: 12px; display: none; justify-content: center; align-items: center; font-size: 50px; user-select: none; cursor: pointer; z-index: 999; box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+        /* 反應測試 */
+        .catch-area { width: 340px; height: 340px; background: #E4ECE7; position: relative; border-radius: 6px; border: 1px solid #C1D3C8; overflow: hidden; cursor: crosshair; }
+        .red-packet { position: absolute; width: 70px; height: 70px; background-color: var(--hk-accent); border: 2px solid #F59E0B; border-radius: 6px; display: none; justify-content: center; align-items: center; font-size: 15px; color: #FFFFFF; font-weight: 500; user-select: none; cursor: pointer; z-index: 999; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
         
-        .sort-area { width: 320px; height: 250px; background: #fff; border: 3px solid var(--hk-blue); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;}
-        .sort-item { font-size: 80px; margin-bottom: 20px; }
-        .sort-rule { position: absolute; top: 10px; left: 10px; right: 10px; background: #e3f2fd; padding: 8px; border-radius: 6px; text-align: center; font-weight: bold; color: var(--hk-blue); }
-        .sort-rule.changed { background: #ffebee; color: var(--hk-red); animation: pulse 1s 3; }
-        .sort-btns { display: flex; gap: 20px; width: 320px; margin-top: 15px; }
-        .btn-sort { flex: 1; padding: 15px; font-size: 20px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; }
-        .btn-yes { background: var(--hk-green); color: white; }
-        .btn-no { background: #95a5a6; color: white; }
+        /* 超市執貨 */
+        .sort-area { width: 340px; height: 220px; background: #FFFFFF; border: 1px solid var(--border-light); border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; box-shadow: 0 2px 12px rgba(0,0,0,0.01);}
+        .sort-item { font-size: 48px; margin-bottom: 10px; color: var(--text-main); font-weight: normal; }
+        .sort-rule { position: absolute; top: 15px; left: 15px; right: 15px; background: #F0FDF4; padding: 10px; border-radius: 4px; text-align: center; font-size: 15px; font-weight: 500; color: var(--medical-primary); border: 1px solid #DCFCE7; }
+        .sort-rule.changed { background: #FEF2F2; color: var(--hk-accent); border-color: #FEE2E2; }
+        .sort-btns { display: flex; gap: 15px; width: 340px; margin-top: 20px; }
+        .btn-sort { flex: 1; padding: 14px; font-size: 16px; font-weight: 500; border: none; border-radius: 4px; cursor: pointer; transition: opacity 0.2s; }
+        .btn-sort:hover { opacity: 0.9; }
+        .btn-yes { background: var(--medical-primary); color: white; }
+        .btn-no { background: #64748B; color: white; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>大腦活力測試中心 <span class="tech-badge">臨床早期預警系統</span></h1>
-        <p class="subtitle">追蹤細微變化 ‧ 提供非藥物治療介入</p>
+        <p class="subtitle">追蹤細微行為變化 ‧ 提供非藥物治療介入建議</p>
     </header>
 
     <div id="view-intro" class="view-section active-view" style="display: flex;">
         <div class="intro-box">
-            <h2 class="intro-title">🧠 歡迎進行大腦健康遊戲</h2>
+            <h2 class="intro-title">大腦健康活力評估</h2>
             <ul class="test-list">
-                <li><strong>第 1 關：點心對弈棋 🥟</strong> - 測試思考與計畫</li>
-                <li><strong>第 2 關：麻雀尋親記 🀄</strong> - 測試短期記憶力</li>
-                <li><strong>第 3 關：快手搶利是 🧧</strong> - 測試微震顫與視覺反應</li>
-                <li><strong>第 4 關：超市執貨員 🛒</strong> - 測試認知靈活性(大腦切換)</li>
+                <li><strong>第一關：點心對弈棋</strong><br>評估前額葉的邏輯規劃與策略推演能力。</li>
+                <li><strong>第二關：麻雀尋親記</strong><br>評估海馬體的短期工作記憶與資訊暫存功能。</li>
+                <li><strong>第三關：快手搶利是</strong><br>評估神經傳導速度、視覺運動反應及手部微震顫特徵。</li>
+                <li><strong>第四關：超市執貨員</strong><br>評估大腦執行功能的認知靈活性與抗習慣性干擾能力。</li>
             </ul>
-            <button class="btn-large btn-start" onclick="startAssessmentFlow()">🚀 準備好了，開始遊戲</button>
+            <button class="btn-large btn-start" onclick="startAssessmentFlow()">開始健康評估</button>
         </div>
     </div>
 
     <div id="view-rules" class="view-section">
         <div class="rules-box">
-            <h2 class="rules-title" id="rule-title">遊戲規則</h2>
+            <h2 class="rules-title" id="rule-title">項目說明</h2>
             <div id="rule-content"></div>
             <button class="btn-large" id="btn-start-game" onclick="enterGame()"></button>
-            <button class="btn-large btn-exit" onclick="goHome()" style="margin-top: 15px; width: 100%;">🚪 不玩了，回首頁</button>
+            <button class="btn-large btn-exit" onclick="goHome()" style="margin-top: 15px; width: 100%;">返回主頁面</button>
         </div>
     </div>
 
     <div id="view-game" class="view-section">
         <div class="game-section">
             <div class="game-header">
-                <button class="btn-large btn-exit" onclick="goHome()">🚪 退出遊戲</button>
-                <h2 id="game-header-title" style="color:var(--hk-wood); margin-top:0; font-size: 24px;"></h2>
+                <button class="btn-large btn-exit" onclick="goHome()">中斷評估</button>
+                <h2 id="game-header-title" style="color: var(--medical-dark); margin-top:0; font-size: 20px; font-weight: 600;"></h2>
             </div>
             
             <div id="game-container-1" style="display:none;"><div class="board" id="board-1"></div></div>
@@ -139,18 +253,18 @@
             
             <div id="game-container-3" style="display:none;">
                 <div class="catch-area" id="board-3" onmousemove="trackMouseTremor(event)">
-                    <div class="red-packet" id="target-packet" onclick="catchPacket()">🧧</div>
+                    <div class="red-packet" id="target-packet" onclick="catchPacket()">目標</div>
                 </div>
             </div>
             
             <div id="game-container-4" style="display:none;">
                 <div class="sort-area">
                     <div class="sort-rule" id="sort-rule-text">請將【紅色】的食物放入購物車</div>
-                    <div class="sort-item" id="sort-item-icon">🍎</div>
+                    <div class="sort-item" id="sort-item-icon">蘋果</div>
                 </div>
                 <div class="sort-btns">
-                    <button class="btn-sort btn-yes" onclick="handleSort(true)">✅ 要放入</button>
-                    <button class="btn-sort btn-no" onclick="handleSort(false)">❌ 不要</button>
+                    <button class="btn-sort btn-yes" onclick="handleSort(true)">符合規則</button>
+                    <button class="btn-sort btn-no" onclick="handleSort(false)">不符合</button>
                 </div>
             </div>
             
@@ -161,53 +275,54 @@
 
     <div id="view-report" class="view-section">
         <div class="rules-box report-box">
-            <h2 class="report-title" style="font-size: 28px;">📊 大腦活力測試報告</h2>
+            <h2 class="report-title">大腦活力健康報告</h2>
             <div class="report-time-stamp" id="rep-timestamp"></div>
             
-            <div class="report-section-title">📍 第一部分：認知指標趨勢</div>
+            <div class="report-section-title">📍 第一部分：核心認知維度評估</div>
             <div class="report-grid">
                 <div class="report-card">
-                    <div class="report-card-header"><div class="r-title">🧩 短期記憶力</div><div id="rep-mem-status"></div></div>
+                    <div class="report-card-header"><div class="r-title">工作記憶表現 (短期記憶)</div><div id="rep-mem-status"></div></div>
                     <div class="r-content-box">
-                        <div class="metric-row"><span>麻雀配對失誤：</span><span class="metric-val" id="rep-g2-errors"></span></div>
+                        <div class="metric-row"><span>配對階段錯誤次數：</span><span class="metric-val" id="rep-g2-errors"></span></div>
                     </div>
                 </div>
                 <div class="report-card">
-                    <div class="report-card-header"><div class="r-title">🔄 認知靈活性 (固著檢測)</div><div id="rep-flex-status"></div></div>
+                    <div class="report-card-header"><div class="r-title">執行功能維度 (認知靈活性)</div><div id="rep-flex-status"></div></div>
                     <div class="r-content-box">
-                        <div class="metric-row"><span>規則切換後適應失敗：</span><span class="metric-val" id="rep-g4-flex"></span></div>
+                        <div class="metric-row"><span>規則切換後固著錯誤：</span><span class="metric-val" id="rep-g4-flex"></span></div>
                         <div class="insight-text" id="rep-inv-flex-insight"></div>
                     </div>
                 </div>
             </div>
 
-            <div class="report-section-title invisible">🔍 第二部分：微物理特徵追蹤 (表型數據)</div>
+            <div class="report-section-title invisible">🔍 第二部分：微表型行為數據分析</div>
             <div class="report-grid">
                 <div class="report-card invisible-card">
-                    <div class="report-card-header"><div class="r-title">⏱️ 決策猶豫期 (Hesitation Time)</div></div>
+                    <div class="report-card-header"><div class="r-title">決策潛伏期 (猶豫時間追蹤)</div></div>
                     <div class="r-content-box">
-                        <div class="metric-row"><span>下棋平均猶豫時間：</span><span class="metric-val" id="rep-inv-hesitation"></span></div>
+                        <div class="metric-row"><span>思考推演平均耗時：</span><span class="metric-val" id="rep-inv-hesitation"></span></div>
                         <div class="insight-text" id="rep-inv-hesitation-insight"></div>
                     </div>
                 </div>
                 <div class="report-card invisible-card">
-                    <div class="report-card-header"><div class="r-title">🤚 觸控動力學 (微震顫檢測)</div></div>
+                    <div class="report-card-header"><div class="r-title">觸控動力學特徵 (運動穩定度)</div></div>
                     <div class="r-content-box">
-                        <div class="metric-row"><span>搶利是時的無效游移軌跡：</span><span class="metric-val" id="rep-inv-tremor"></span></div>
+                        <div class="metric-row"><span>無效游移及微震顫頻率：</span><span class="metric-val" id="rep-inv-tremor"></span></div>
                         <div class="insight-text" id="rep-inv-tremor-insight"></div>
                     </div>
                 </div>
             </div>
 
-            <div class="report-section-title prescription">💊 第三部分：非藥物介入處方 (NPI)</div>
+            <div class="report-section-title prescription">💊 第三部分：非藥物介入處方方案 (NPI)</div>
             <div class="report-grid">
                 <div class="report-card prescription-card">
                     <div class="r-content-box" id="rep-prescription-content">
-                        </div>
+                        <!-- 動態插入治療建議 -->
+                    </div>
                 </div>
             </div>
 
-            <button class="btn-large" style="background-color: var(--hk-blue); font-size: 22px; margin-top: 30px;" onclick="goHome()">🏠 完成測試，返回大廳</button>
+            <button class="btn-large" style="background-color: var(--medical-dark); margin-top: 30px;" onclick="goHome()">完成評估，關閉報告</button>
         </div>
     </div>
 
@@ -229,10 +344,10 @@
         let isPacketActive = false;
 
         const gameData = {
-            1: { title: "點心對弈棋", rules: "<p>1. 您和電腦對決，點擊空白格子放<b>蝦餃🥟</b>。</p><p>2. 先連成三線者勝。</p>" },
-            2: { title: "麻雀尋親記", rules: "<p>1. 每次翻開兩隻，圖案一樣就配對。</p><p>2. 試著用最少次數記住位置！</p>" },
-            3: { title: "快手搶利是", rules: "<p>1. 利是🧧隨機出現，請用最快速度點擊！</p><p>2. 系統將同時分析您的手部穩定度。</p>" },
-            4: { title: "超市執貨員", rules: "<p>1. 根據上方<b>指示牌</b>，決定要不要放入購物車。</p><p>2. <b>注意：規則可能會中途改變喔！</b></p>" }
+            1: { title: "點心對弈棋", rules: "<p>1. 這是您與系統的策略對弈，請點擊空白格子放置棋子。</p><p>2. 先將三個己方棋子連成一線（橫、直、斜）者獲勝。</p>" },
+            2: { title: "麻雀尋親記", rules: "<p>1. 畫面上覆蓋有 12 隻圖案麻雀。</p><p>2. 每次可選擇翻開兩隻，若圖案相同則配對成功。</p><p>3. 請嘗試以最少的操作次數完成全數配對。</p>" },
+            3: { title: "快手搶利是", rules: "<p>1. 請保持專注，盯著綠色評估區域。</p><p>2. 當目標方塊隨機出現時，請以最快速度點擊該目標。</p><p>3. 系統將同時分析您的視覺傳導與手部控制穩定度。</p>" },
+            4: { title: "超市執貨員", rules: "<p>1. 畫面中央將輪流出現不同的物件項。</p><p>2. 請根據頂部看板實時顯示的指示規則，判斷是否將其分類納入。</p><p>3. 提示：分類指示規則將在中途發生改變，請注意調整判斷基準。</p>" }
         };
 
         function switchView(viewId) { document.querySelectorAll('.view-section').forEach(el => { el.classList.remove('active-view'); el.style.display = 'none'; }); document.getElementById(viewId).style.display = ''; document.getElementById(viewId).classList.add('active-view'); }
@@ -244,16 +359,16 @@
         }
 
         function showRulesForStage(stageNum) {
-            document.getElementById('rule-title').innerText = `第 ${stageNum} 關：${gameData[stageNum].title}`;
+            document.getElementById('rule-title').innerText = `項目 ${stageNum}：${gameData[stageNum].title}`;
             document.getElementById('rule-content').innerHTML = gameData[stageNum].rules;
-            document.getElementById('btn-start-game').innerText = `✅ 準備好，開始第 ${stageNum} 關`;
+            document.getElementById('btn-start-game').innerText = `確認，進入項目 ${stageNum}`;
             switchView('view-rules');
         }
 
         function enterGame() {
             switchView('view-game');
             document.getElementById('btn-next-test').style.display = 'none'; 
-            document.getElementById('game-header-title').innerText = `第 ${currentStageIndex}/4 關：${gameData[currentStageIndex].title}`;
+            document.getElementById('game-header-title').innerText = `評估進度：${currentStageIndex} / 4`;
             [1,2,3,4].forEach(i => document.getElementById(`game-container-${i}`).style.display = 'none');
             document.getElementById(`game-container-${currentStageIndex}`).style.display = 'block';
 
@@ -266,12 +381,12 @@
         function handleStageComplete() {
             const nextBtn = document.getElementById('btn-next-test'); nextBtn.style.display = 'block';
             if (currentStageIndex < 4) { 
-                nextBtn.innerText = `前往第 ${currentStageIndex + 1} 關 ➡️`; 
+                nextBtn.innerText = `進入下一個評估項目 ➡️`; 
                 nextBtn.onclick = () => { currentStageIndex++; showRulesForStage(currentStageIndex); };
             } else { 
-                document.getElementById('game-status').innerText = "✅ 所有遊戲均已完成！請點擊下方按鈕查看您的專屬報告。";
-                nextBtn.innerText = "🎉 生成大腦評估報告 📊"; 
-                nextBtn.style.backgroundColor = "var(--hk-purple)"; 
+                document.getElementById('game-status').innerText = "評估階段均已完成，請生成健康報告。";
+                nextBtn.innerText = "生成大腦評估報告 📊"; 
+                nextBtn.style.backgroundColor = "var(--hk-accent)"; 
                 nextBtn.onclick = generateReport; 
             }
         }
@@ -292,34 +407,34 @@
             const tremor = trackingData.g3MouseTremorCount;
 
             document.getElementById('rep-g2-errors').innerText = `${curMem} 次`;
-            document.getElementById('rep-mem-status').innerHTML = curMem <= 5 ? '<span class="status-badge status-good">海馬體健康</span>' : '<span class="status-badge status-warn">短期記憶較弱</span>';
+            document.getElementById('rep-mem-status').innerHTML = curMem <= 5 ? '<span class="status-badge status-good">健康水平</span>' : '<span class="status-badge status-warn">短期記憶稍有退化</span>';
             
             document.getElementById('rep-g4-flex').innerText = `${curFlex} 次`;
-            document.getElementById('rep-flex-status').innerHTML = curFlex === 0 ? '<span class="status-badge status-good">額葉靈活</span>' : '<span class="status-badge status-danger">固著警示</span>';
-            document.getElementById('rep-inv-flex-insight').innerText = curFlex > 0 ? "💡 【額葉預警】當規則改變時，大腦習慣性沿用舊規則，這是額葉執行功能疲勞的早期徵兆。" : "💡 面對規則改變能瞬間適應，額葉執行功能非常健康。";
+            document.getElementById('rep-flex-status').innerHTML = curFlex === 0 ? '<span class="status-badge status-good">功能良好</span>' : '<span class="status-badge status-danger">固著特徵警示</span>';
+            document.getElementById('rep-inv-flex-insight').innerText = curFlex > 0 ? "臨床分析：當外部指示規則發生改變時，神經系統表現出沿用舊運算機制的慣性，提示前額葉執行功能的認知彈性存在早期疲勞風險。" : "臨床分析：面對環境規則切換適應迅速，執行功能處於健康區間。";
 
             document.getElementById('rep-inv-hesitation').innerText = `${curAvgThink} 秒`;
-            document.getElementById('rep-inv-hesitation-insight').innerText = curAvgThink < 3 ? "💡 決策無明顯遲滯。" : "💡 決策前有明顯猶豫期，面對新資訊時大腦運算時間拉長。";
+            document.getElementById('rep-inv-hesitation-insight').innerText = curAvgThink < 3 ? "臨床分析：決策路徑清晰，資訊處理未見明顯阻滯。" : "臨床分析：決策潛伏期相對延長（高於3秒），提示面對新決策場景時大腦整合與執行運算負載增加。";
 
             document.getElementById('rep-inv-tremor').innerText = `${tremor} 次`;
-            document.getElementById('rep-inv-tremor-insight').innerText = tremor > 15 ? "💡 檢測到游標移動軌跡不穩定。可能與視空間定位困難、或是神經性微震顫（Tremor）有關。" : "💡 手部控制與游標軌跡穩定，神經傳導正常。";
+            document.getElementById('rep-inv-tremor-insight').innerText = tremor > 15 ? "臨床分析：檢測到游標定位軌跡不平滑。此現象可能與視覺空間空間定位功能波動、或特發性微震顫等神經運動控制減弱相關。" : "臨床分析：運動終點精準度良好，終端肌肉與神經傳導控制平穩。";
 
             let preContent = "";
             if (curFlex > 0) {
-                preContent += `<div class="p-task"><div class="p-icon">🚶‍♂️</div><div class="p-detail"><strong>大腦神經活化：雙重任務運動 (Dual-task)</strong>系統發現您的「認知靈活性」偏弱。醫學建議：每週 3 次，一邊散步一邊在心裡進行倒數（例如從 100 開始每次減 7：93, 86...）。強迫大腦同時處理動作與運算，能有效刺激額葉神經新生。</div></div>`;
+                preContent += `<div class="p-task"><div class="p-icon">方案 A</div><div class="p-detail"><strong>大腦神經活化：雙重任務運動 (Dual-task training)</strong>針對檢測到的認知靈活性波動。醫學介入建議：每週進行3次，在快走或散步的同時進行倒數計算（如自100開始每次遞減7：93、86...）。這種強迫神經網絡同時處理運動輸出與抽象運算的模式，能有效刺激前額葉迴路。</div></div>`;
             }
             if (curMem > 4) {
-                preContent += `<div class="p-task"><div class="p-icon">🥗</div><div class="p-detail"><strong>飲食處方：麥得飲食 (MIND Diet)</strong>短期記憶表現較弱。強烈建議在未來一週的飲食中，加入深綠色蔬菜（如菠菜、芥蘭）與堅果（如合桃）。這些食物富含抗氧化劑，被證實能幫助大腦健康。</div></div>`;
-                preContent += `<div class="p-task"><div class="p-icon">🛒</div><div class="p-detail"><strong>記憶韌性訓練：無紙條購物</strong>去街市或超市時，停止依賴清單。在出門前用心智圖在腦海中記住 5 樣要買的物品，以此鍛鍊海馬體的短期記憶庫存能力。</div></div>`;
+                preContent += `<div class="p-task"><div class="p-icon">方案 B</div><div class="p-detail"><strong>營養與細胞保護：麥得飲食 (MIND Diet)</strong>針對短期工作記憶表現。介入建議：在日常飲食中增加深綠色葉菜類與堅果類攝取。此類膳食結構富含抗氧化與抗炎成分，臨床研究證實有助於維護神經元結構完整，延緩認知退化進程。</div></div>`;
+                preContent += `<div class="p-task"><div class="p-icon">方案 C</div><div class="p-detail"><strong>記憶韌性自主訓練：工作記憶庫存挑戰</strong>在日常購物、飲茶點餐時，嘗試不依賴紙筆或數位備忘錄。在出門前於腦海中構建5項事務的空間心智圖，強迫海馬體進行深度的存取提取與復述訓練。</div></div>`;
             }
             if (tremor > 15 || curAvgThink > 3) {
-                preContent += `<div class="p-task"><div class="p-icon">🧶</div><div class="p-detail"><strong>視空間與精細動作訓練</strong>偵測到反應猶豫與輕微軌跡震顫。建議在家中進行需要眼手協調的精細活動，例如：穿針線、簡單的摺紙，或是學習使用非慣用手吃飯，幫助鍛鍊運動神經迴路。</div></div>`;
+                preContent += `<div class="p-task"><div class="p-icon">方案 D</div><div class="p-detail"><strong>末端運動控制與空間維度訓練</strong>針對手部軌跡不平滑與決策潛伏期延長。建議在家中多進行需要手眼協調的精細操作，例如穿針引線、編織、摺紙等，或有意識地練習使用非慣用手進行常規生活操作，促進運動皮質區的突觸重塑。</div></div>`;
             }
             if (preContent === "") {
-                preContent = `<div class="p-task"><div class="p-icon">🌟</div><div class="p-detail"><strong>健康維持方案</strong>您的各項指標都非常優秀！請繼續保持目前的社交活動與規律睡眠。</div></div>`;
+                preContent = `<div class="p-task"><div class="p-icon">方案 O</div><div class="p-detail"><strong>常規大腦健康維護方案</strong>當前各項隱形行為數據均維持在基線以上。建議繼續保持穩定的社交活動、有氧運動與高質量睡眠。建議每季度進行一次定期動態追蹤。</div></div>`;
             }
             if(curFlex > 0 || tremor > 15) {
-                preContent += `<div style="background:#fff3cd; padding:10px; border-radius:6px; font-size:14px; margin-top:20px; color:#856404; border: 1px dashed #ffeeba;"><strong>👨‍👩‍👧 家屬建議：</strong><br>長者在某些任務中出現輕微卡頓，建議家屬週末探望時，多陪同進行溫和的腦力刺激活動（如一起看舊相簿）。</div>`;
+                preContent += `<div style="background: #FFF9E6; padding: 16px; border-radius: 4px; font-size: 14px; margin-top: 20px; color: #664D03; border: 1px solid #FFF0C2;"><strong>臨床護理與家屬支持導引：</strong><br>檢測到微觀認知軌跡出現波動。建議家屬在日常生活中融入溫和的「回憶治療 (Reminiscence Therapy)」，如與長者共同回顧歷史相片並引導其講述細節，提供非壓力性質的腦力皮質刺激。若相關特徵在常規生活中持續一個月並有加重趨勢，建議攜帶此報告前往老人科或腦神經科作進一步量表篩查。</div>`;
             }
 
             document.getElementById('rep-prescription-content').innerHTML = preContent;
@@ -329,25 +444,25 @@
         // --- 遊戲 1：下棋 ---
         let board1 = Array(16).fill(0); let isPlayerTurn = true; 
         const wins = [
-            [0,1,2],[1,2,3],[4,5,6],[5,6,7],[8,9,10],[9,10,11],[12,13,14],[13,14,15], // 橫
-            [0,4,8],[4,8,12],[1,5,9],[5,9,13],[2,6,10],[6,10,14],[3,7,11],[7,11,15], // 直
-            [0,5,10],[5,10,15],[3,6,9],[6,9,12], // 主對角線
-            [1,6,11],[4,9,14],[2,5,8],[7,10,13]  // 副對角線
+            [0,1,2],[1,2,3],[4,5,6],[5,6,7],[8,9,10],[9,10,11],[12,13,14],[13,14,15], 
+            [0,4,8],[4,8,12],[1,5,9],[5,9,13],[2,6,10],[6,10,14],[3,7,11],[7,11,15], 
+            [0,5,10],[5,10,15],[3,6,9],[6,9,12], 
+            [1,6,11],[4,9,14],[2,5,8],[7,10,13]  
         ];
         
         function checkWin1(player) { return wins.some(p => p.every(idx => board1[idx] === player)); }
         
         function getSmartAiMove(board) {
             let empty = board.map((v,i) => v===0 ? i : -1).filter(v => v !== -1);
-            for (let i of empty) { board[i] = 2; if (checkWin1(2)) { board[i] = 0; return i; } board[i] = 0; } // 攻
-            for (let i of empty) { board[i] = 1; if (checkWin1(1)) { board[i] = 0; return i; } board[i] = 0; } // 守
+            for (let i of empty) { board[i] = 2; if (checkWin1(2)) { board[i] = 0; return i; } board[i] = 0; } 
+            for (let i of empty) { board[i] = 1; if (checkWin1(1)) { board[i] = 0; return i; } board[i] = 0; } 
             return empty[Math.floor(Math.random() * empty.length)];
         }
 
         function initGame1() {
             board1 = Array(16).fill(0); gameOver = false; isPlayerTurn = true; 
             const bEl = document.getElementById('board-1'); bEl.innerHTML = ''; 
-            document.getElementById('game-status').innerText = "請點擊空白處放蝦餃🥟"; 
+            document.getElementById('game-status').innerText = "請點擊空白處放置棋子"; 
             turnStartTime = Date.now();
             
             for(let i=0; i<16; i++){
@@ -358,36 +473,36 @@
                     
                     isPlayerTurn = false; 
                     board1[i] = 1; 
-                    cell.innerHTML = '<span class="piece-pop">🥟</span>';
+                    cell.innerHTML = '<span class="piece-pop">O</span>';
                     
                     if(checkWin1(1)) { 
-                        document.getElementById('game-status').innerText = "好厲害！您贏了！🎉";
+                        document.getElementById('game-status').innerText = "對弈結束：己方獲勝";
                         gameOver = true; handleStageComplete(); return; 
                     }
                     if(!board1.includes(0)) { 
-                        document.getElementById('game-status').innerText = "平局！🤝";
+                        document.getElementById('game-status').innerText = "對弈結束：雙方平局";
                         gameOver = true; handleStageComplete(); return; 
                     }
 
-                    document.getElementById('game-status').innerText = "換電腦思考中...🤖";
+                    document.getElementById('game-status').innerText = "系統計算路徑中...";
                     
                     aiMoveTimer = setTimeout(() => {
                         if(gameOver) return;
                         
                         let aiMove = getSmartAiMove(board1); 
                         board1[aiMove] = 2; 
-                        bEl.children[aiMove].innerHTML = '<span class="piece-pop">🫓</span>';
+                        bEl.children[aiMove].innerHTML = '<span class="piece-pop">X</span>';
                         
                         if(checkWin1(2)) { 
-                            document.getElementById('game-status').innerText = "電腦贏了！再接再厲💪";
+                            document.getElementById('game-status').innerText = "對弈結束：系統獲勝";
                             gameOver = true; handleStageComplete(); return; 
                         }
                         if(!board1.includes(0)) { 
-                            document.getElementById('game-status').innerText = "平局！🤝";
+                            document.getElementById('game-status').innerText = "對弈結束：雙方平局";
                             gameOver = true; handleStageComplete(); return; 
                         }
                         
-                        document.getElementById('game-status').innerText = "輪到您了 (請放蝦餃🥟)";
+                        document.getElementById('game-status').innerText = "請進行下棋決策";
                         isPlayerTurn = true; 
                         turnStartTime = Date.now();
                     }, 800);
@@ -399,10 +514,10 @@
         // --- 遊戲 2：麻雀 ---
         let flippedCards = []; let matchedPairs = 0;
         function initGame2() {
-            const symbols = ['🀄','🀄','🀅','🀅','🀆','🀆','🀀','🀀','🀁','🀁','🀂','🀂'].sort(() => Math.random() - 0.5);
+            const symbols = ['1','1','2','2','3','3','4','4','5','5','6','6'].sort(() => Math.random() - 0.5);
             flippedCards = []; matchedPairs = 0; gameOver = false; 
             const bEl = document.getElementById('board-2'); bEl.innerHTML = '';
-            document.getElementById('game-status').innerText = "請翻開兩張麻雀進行配對";
+            document.getElementById('game-status').innerText = "請選擇兩枚卡牌進行匹配驗證";
             
             symbols.forEach((sym) => {
                 let card = document.createElement('div'); card.className = 'mj-card'; card.dataset.sym = sym;
@@ -413,7 +528,7 @@
                         if (flippedCards[0].dataset.sym === flippedCards[1].dataset.sym) {
                             flippedCards[0].classList.add('matched'); flippedCards[1].classList.add('matched'); flippedCards = []; matchedPairs++;
                             if(matchedPairs === 6) { 
-                                document.getElementById('game-status').innerText = "太棒了！全部找出來了！🎉";
+                                document.getElementById('game-status').innerText = "匹配驗證完成";
                                 gameOver = true; handleStageComplete(); 
                             }
                         } else {
@@ -426,10 +541,10 @@
 
         // --- 遊戲 3：利是 ---
         let catchCount = 0; let showTime = 0;
-        function initGame3() { clearTimeout(catchTimer); catchCount = 0; trackingData.g3MouseTremorCount = 0; gameOver = false; isPacketActive = false; lastMousePos = {x:0, y:0}; document.getElementById('target-packet').style.display = 'none'; document.getElementById('game-status').innerText = "準備好...利是隨時會出現！"; scheduleNextPacket(); }
+        function initGame3() { clearTimeout(catchTimer); catchCount = 0; trackingData.g3MouseTremorCount = 0; gameOver = false; isPacketActive = false; lastMousePos = {x:0, y:0}; document.getElementById('target-packet').style.display = 'none'; document.getElementById('game-status').innerText = "請保持專注，目標即將隨機出現"; scheduleNextPacket(); }
         function scheduleNextPacket() {
             if (catchCount >= 5) { 
-                document.getElementById('game-status').innerText = "反應測試完成！辛苦了！👏";
+                document.getElementById('game-status').innerText = "反應特徵動態採集完成";
                 gameOver = true; isPacketActive = false; handleStageComplete(); return; 
             }
             catchTimer = setTimeout(() => {
@@ -441,20 +556,20 @@
         function catchPacket() {
             if(gameOver) return; trackingData.g3ReactTimes.push((Date.now() - showTime) / 1000); catchCount++; isPacketActive = false;
             document.getElementById('target-packet').style.display = 'none'; 
-            document.getElementById('game-status').innerText = "抓到了！等待下一個...";
+            document.getElementById('game-status').innerText = "已成功捕捉目標項";
             setTimeout(scheduleNextPacket, 500); 
         }
 
         // --- 遊戲 4：規則切換 ---
-        let sortItems = [ { icon: '🍎', isRed: true, isVeg: false }, { icon: '🍏', isRed: false, isVeg: false }, { icon: '🍅', isRed: true, isVeg: true }, { icon: '🥦', isRed: false, isVeg: true }, { icon: '🍓', isRed: true, isVeg: false }, { icon: '🍎', isRed: true, isVeg: false }, { icon: '🥬', isRed: false, isVeg: true }, { icon: '🍒', isRed: true, isVeg: false }, { icon: '🥕', isRed: true, isVeg: true } ];
+        let sortItems = [ { icon: 'A', isRed: true, isVeg: false }, { icon: 'B', isRed: false, isVeg: false }, { icon: 'C', isRed: true, isVeg: true }, { icon: 'D', isRed: false, isVeg: true }, { icon: 'E', isRed: true, isVeg: false }, { icon: 'A', isRed: true, isVeg: false }, { icon: 'F', isRed: false, isVeg: true }, { icon: 'G', isRed: true, isVeg: false }, { icon: 'H', isRed: true, isVeg: true } ];
         let currentSortIndex = 0; let isRuleRed = true;
         function initGame4() {
-            currentSortIndex = 0; isRuleRed = true; gameOver = false; document.getElementById('sort-rule-text').innerText = "請將【紅色】的食物放入購物車"; document.getElementById('sort-rule-text').className = "sort-rule"; document.getElementById('game-status').innerText = "請判斷是否符合規則"; showNextSortItem();
+            currentSortIndex = 0; isRuleRed = true; gameOver = false; document.getElementById('sort-rule-text').innerText = "請篩選【屬性 A】的目標項"; document.getElementById('sort-rule-text').className = "sort-rule"; document.getElementById('game-status').innerText = "請依據實時規則進行分類判斷"; showNextSortItem();
         }
         function showNextSortItem() {
-            if (currentSortIndex === 5 && isRuleRed) { isRuleRed = false; const ruleEl = document.getElementById('sort-rule-text'); ruleEl.innerText = "⚠️ 規則改變！現在請收【蔬菜】"; ruleEl.className = "sort-rule changed"; document.getElementById('game-status').innerText = "注意規則換囉！"; }
+            if (currentSortIndex === 5 && isRuleRed) { isRuleRed = false; const ruleEl = document.getElementById('sort-rule-text'); ruleEl.innerText = "變更指示：請篩選【屬性 B】的目標項"; ruleEl.className = "sort-rule changed"; document.getElementById('game-status').innerText = "分類基準已實時調整"; }
             if (currentSortIndex >= sortItems.length) { 
-                document.getElementById('game-status').innerText = "分類完成！👏";
+                document.getElementById('game-status').innerText = "基準適應性測試完成";
                 handleStageComplete(); return; 
             }
             document.getElementById('sort-item-icon').innerText = sortItems[currentSortIndex].icon;
